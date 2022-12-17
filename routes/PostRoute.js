@@ -21,11 +21,16 @@ router.post("/posts" ,async(req,res)=>{
             const img = await cloudinary.uploader.upload(file,{
                 folder : "posts"
             })
+            let likes = Math.floor(Math.random()*10000)
+            if(likes > 1000){
+                likes = likes/1000
+            }
+            let like = likes.toFixed(1)+"k"
         const post = new Post({
             name:name,
             location:location,
             description:description,
-            likes:Math.floor(Math.random()*10000),
+            likes:like,
             image:img.secure_url
         })
        const response = await post.save()
