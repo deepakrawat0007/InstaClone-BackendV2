@@ -110,11 +110,6 @@ body('email').isEmail()
     }
 })
 
-router.get("*",(req,res)=>{
-    res.json({
 
-        message :  "404 not found"
-    })
-})
 
 module.exports = router
