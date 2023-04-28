@@ -10,7 +10,8 @@ mongoose.set('strictQuery', false);
 
 async function main() {
 
-    mongoose.connect(API)
+   await mongoose.connect(API)
+   console.log("Connected to database")
     app.listen(port, () => { console.log(`Server is live at Port => ${port}`) })
 }
 

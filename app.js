@@ -7,6 +7,8 @@ const jwt = require('jsonwebtoken')
 const cors = require('cors')
 const PostRoute = require('./routes/PostRoute')
 const fileupload = require("express-fileupload")
+const Authentication = require("./middleware/autherization")
+const AccountRoute = require("./routes/AccountRoute")
 
 app.use(cors())
 app.use(express.json());
@@ -26,61 +28,11 @@ app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Headers", "*");
     next();
 });
-app.use('/posts', (req, res, next) => {
 
-    if (req.headers.authorization) {
-        const token = req.headers.authorization
-        if (token) {
-            jwt.verify(token, secret, function (err, decoded) {
-                if (err) {
-                    return res.status(400).json({
-                        message: "Not a Valid Token"
-                    })
-                }
-                req.user = decoded.data;
-                next()
-            })
-        } else {
-            return res.status(401).json({
-                message: "Token Missing"
-            })
-        }
-
-    } else {
-        return res.status(403).json({
-            message: "Not Authenticated User"
-        })
-    }
-})
-app.use('/user/posts', (req, res, next) => {
-
-    if (req.headers.authorization) {
-        const token = req.headers.authorization
-        if (token) {
-            jwt.verify(token, secret, function (err, decoded) {
-                if (err) {
-                    return res.status(400).json({
-                        message: "Not a Valid Token"
-                    })
-                }
-                req.user = decoded.data;
-                next()
-            })
-        } else {
-            return res.status(401).json({
-                message: "Token Missing"
-            })
-        }
-
-    } else {
-        return res.status(403).json({
-            message: "Not Authenticated User"
-        })
-    }
-})
 
 app.use("/" , UserRoute);
-app.use("/", PostRoute)
+app.use("/",Authentication ,PostRoute)
+app.use("/", Authentication , AccountRoute)
 
 
 module.exports = app

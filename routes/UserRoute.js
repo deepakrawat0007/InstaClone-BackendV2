@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const User = require("../models/UserModel");
+const Account = require("../models/User_AccountModel");
 const { body, validationResult } = require('express-validator');
 const secret = "HELLOUSER";
 const bcrypt = require('bcrypt')
@@ -12,6 +13,7 @@ router.post("/register",
     body('password').isLength({ min: 5, max: 16 })
     , async (req, res) => {
         try {
+            const {name , email ,password} = req.body
             const errors = validationResult(req)
             if (!errors.isEmpty()) {
                 return res.status(400).json({
@@ -36,15 +38,20 @@ router.post("/register",
                                 email: req.body.email,
                                 password: hash
                             })
-                            user.save().then(() => {
-                                res.status(200).json({
-                                    "Message": "User Created SuccessFully",
-                                    "User": user
-                                })
-                            }).catch((e) => {
-                                res.status(400).json({
-                                    "Message": e.message
-                                })
+                            const account = new Account({
+                                email:email,
+                                username:`@${email.split("@")[0]}`,
+                                bio:"",
+                                profileImg:"https://cdn.onlinewebfonts.com/svg/img_569204.png"
+                            })
+
+                            await user.save()
+                            await account.save()
+
+                            return res.status(200).json({
+                                message:"User Registered Succsess",
+                                account:account,
+                                user:user
                             })
                         }
 
