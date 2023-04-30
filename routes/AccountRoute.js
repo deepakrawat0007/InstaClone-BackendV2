@@ -23,7 +23,26 @@ router.get("/userAccount" , async(req, res)=>{
         })
     }
 })
-
+router.put("/updateProfilePic" , async(req , res)=>{
+    try{
+        const file = req.files.file.tempFilePath
+        const img = await cloudinary.uploader.upload(file,{
+            folder : "profile"
+        })
+    const UpdateImage = await User.findByIdAndUpdate(req.user,{ $set:{'profileImg': img.secure_url}},
+        {
+        new: true,
+        useFindAndModity: false
+      })
+      return res.status(200).json({
+        message:"Profile Image Updated SuccessFully",
+        image:req.body.image
+      })
+    }catch(e){
+        return res.status(400).json({message:e.message})
+    }
+     
+})
 
 
 module.exports = router
