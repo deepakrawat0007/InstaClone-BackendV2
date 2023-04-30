@@ -25,11 +25,13 @@ router.get("/userAccount" , async(req, res)=>{
 })
 router.put("/updateProfilePic" , async(req , res)=>{
     try{
+        const user = await User.findById(req.user)
+        const account = await Account.findOne({email:user.email})
         const file = req.files.file.tempFilePath
         const img = await cloudinary.uploader.upload(file,{
             folder : "profile"
         })
-    const UpdateImage = await User.findByIdAndUpdate(req.user,{ $set:{'profileImg': img.secure_url}},
+    const UpdateImage = await Account.findByIdAndUpdate(account._id,{ $set:{'profileImg': img.secure_url}},
         {
         new: true,
         useFindAndModity: false
