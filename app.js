@@ -34,5 +34,11 @@ app.use("/" , UserRoute);
 app.use("/",Authentication ,PostRoute)
 app.use("/", Authentication , AccountRoute)
 
+app.get("/" , async(req,res)=>{
+    return res.status(200).json({
+        message:"Server is OK"
+    })
+})
+
 
 module.exports = app
