@@ -9,7 +9,7 @@ router.get("/posts" ,async (req,res)=> {
         res.status(200).json(posts)
     }catch(e){
         res.status(400).json({
-            "Message":e.message
+            message:e.message
         })
     }
 
@@ -57,7 +57,7 @@ router.post("/posts" ,async(req,res)=>{
 
     }catch(e){
         res.status(400).json({
-            "Message":e.message
+            message:e.message
         })
     }
 })

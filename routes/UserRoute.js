@@ -17,19 +17,19 @@ router.post("/register",
             const errors = validationResult(req)
             if (!errors.isEmpty()) {
                 return res.status(400).json({
-                    "message": errors.array(),
+                    message: errors.array(),
                 })
             } else {
                 const isUser = await User.findOne({ email: req.body.email })
                 if (isUser) {
                     return res.status(400).json({
-                        "message": "User Already Exists with Given MAil_Id"
+                        message: "User Already Exists with Given MAil_Id"
                     })
                 } else {
                     bcrypt.hash(req.body.password, 10, async function (err, hash) {
                         if (err) {
                             return res.status(400).json({
-                                "Message": err.message
+                                message: err.message
                             })
                         }
                         else {
@@ -62,7 +62,7 @@ router.post("/register",
 
         } catch (e) {
             return res.status(400).json({
-                "Error-Message": e.message
+                message: e.message
             })
         }
     })
@@ -75,20 +75,20 @@ body('email').isEmail()
         const errors = validationResult(req)
         if(!errors.isEmpty()){
             return res.status(400).json({
-                "Message":errors.array()
+                message:errors.array()
             })
         }else{
         const ISuser = await User.findOne({email:email})
         if(!ISuser){
             return res.status(400).json({
-                "Message" : "NO USER EXISTS WITH GIVEN MAIL_ID"
+                message : "NO USER EXISTS WITH GIVEN MAIL_ID"
             })
         }
         else{
             bcrypt.compare(password , ISuser.password , function(err , result){
                 if(err){
                     return res.status(400).json({
-                        "Message":err.message
+                        message:err.message
                     })
                 }
                 if(result){
@@ -98,12 +98,12 @@ body('email').isEmail()
                     }, secret);
 
                     return res.status(200).json({
-                        "Message":`Logged In SuccessFully Welcome ${ISuser.name}`,
+                        message:`Logged In SuccessFully Welcome ${ISuser.name}`,
                         "Token":token
                     })
                 }else{
                     return res.status(400).json({
-                        "Message":"Invalid Credentials"
+                        message:"Invalid Credentials"
                     })
                 }
 
@@ -112,7 +112,7 @@ body('email').isEmail()
         }
     }catch(e){
         return res.status(400).json({
-            "message":e.message
+            message:e.message
         })
     }
 })
